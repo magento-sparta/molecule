@@ -132,6 +132,9 @@ py3-urllib3 \
 py3-virtualenv \
 py3-websocket-client \
 python3 \
+sudo \
+bash \
+ca-certificates \
 "
 
 ENV BUILD_DEPS="\
@@ -169,6 +172,17 @@ molecule-lxd \
 molecule-openstack \
 molecule-vagrant \
 "
+
+# Create users and groups for Jenkins
+RUN \
+    sed -i 's/ping:x:999:/ping:x:990:/i' /etc/group \
+    && addgroup -g 999 docker \
+    && addgroup -g 1004 jenkins \
+    && adduser -h /home/jenkins -D -G jenkins -G docker -s /bin/sh -u 1003 jenkins
+
+# Switch to HTTPS repositories
+RUN sed -i "s/http:/https:/g" /etc/apk/repositories \
+    && sed -i "s/dl-cdn.alpinelinux.org/alpine.global.ssl.fastly.net/g" /etc/apk/repositories
 
 RUN \
     apk add --update --no-cache \
