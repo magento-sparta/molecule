@@ -197,6 +197,7 @@ RUN \
     python3 -m pip install \
     ${PIP_INSTALL_ARGS} \
     "molecule[${MOLECULE_EXTRAS}]" testinfra ${MOLECULE_PLUGINS} && \
+    python3 -m pip install hvac && \
     molecule --version && \
     molecule drivers
 # running molecule commands adds a minimal level fail-safe about build success
